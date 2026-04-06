@@ -26,22 +26,42 @@ print(df.describe())
 # Run a linear regression (OLS) with 'approved' as the dependent variable
 # and 'credit_score' and 'debt_to_income' as predictors.
 # Print the full model summary.
+# Prepare data for OLS
+X = df[['credit_score', 'debt_to_income']]
+X = sm.add_constant(X)
+y = df['approved']
 
-# YOUR CODE HERE
+# Fit OLS model
+ols_model = sm.OLS(y, X).fit()
+
+print("\n--- Problem 1: OLS Regression Summary ---")
+print(ols_model.summary())
 
 
 # ── Problem 2: Logistic Regression ───────────────────────────────────────────
 # Run a logistic regression with the same predictors and outcome variable.
 # Print the full model summary.
 
-# YOUR CODE HERE
+# Prepare data for logistic regression (reuse X and y from above)
+logit_model = sm.Logit(y, X).fit(disp=False)
+
+print("\n--- Problem 2: Logistic Regression Summary ---")
+print(logit_model.summary())
 
 
 # ── Problem 3: OLS Fitted Values ──────────────────────────────────────────────
 # Print the fitted values from your OLS model.
 # Count and print how many predictions fall outside the range [0, 1].
 
-# YOUR CODE HERE
+# Fitted values from OLS
+fitted_vals = ols_model.fittedvalues
+
+print("\n--- Problem 3: OLS Fitted Values ---")
+print(fitted_vals.head())
+
+# Count predictions outside [0,1]
+outside_count = ((fitted_vals < 0) | (fitted_vals > 1)).sum()
+print(f"Number of OLS predictions outside [0,1]: {outside_count}")
 
 
 # ── Problems 4 & 5: Written Answers ──────────────────────────────────────────
